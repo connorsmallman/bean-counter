@@ -2,7 +2,6 @@ import { h, app } from 'hyperapp';
 import hyperx from 'hyperx';
 
 const html = hyperx(h);
-
 const n = 3;
 
 const createEdges = (vertices, edges = []) => {
@@ -76,4 +75,15 @@ const reducers = {
   }
 };
 
-app({ model, view, reducers, effects })
+const subscriptions = [
+  (model, actions) => document.addEventListener('keyup', e => {
+    const id = Number(e.key);
+    const counter = model.counters.filter(c => c.id === id)[0];
+
+    if (counter) {
+      actions.increment(counter);
+    }
+  })
+]
+
+app({ model, view, reducers, effects, subscriptions })
